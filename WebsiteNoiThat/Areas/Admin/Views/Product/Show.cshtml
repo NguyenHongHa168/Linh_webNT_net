@@ -1,0 +1,74 @@
+﻿@{
+    if (TempData["SuccessMessage"] != null)
+    {
+        <script type="text/javascript">
+            toastr.success('@TempData["SuccessMessage"]');
+        </script>
+    }
+}
+
+
+@model IEnumerable<noithat.Models.ProductViewModel>
+@{
+    ViewBag.Title = "Show";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<h3 style="text-transform: uppercase; font-weight:bold">Danh sách sản phẩm</h3>
+
+<hr />
+<p>
+    <a href="@Url.Action("Add", "Product")" class="btn btn-primary" style="margin-top:10px; margin-bottom:10px;">Thêm sản phẩm</a>
+</p>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="example" class="table table-striped table-bordered table-hover" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Mã SP</th>
+                        <th>Tên SP</th>
+                        <th>Hình ảnh</th>
+                        <th>Mô tả</th>
+                        <th>Danh mục SP</th>
+                        <th>Giảng viên</th>
+                        <th>Số lượng</th>
+                        <th>Khuyến mãi</th>
+                        <th>Giá</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="Search">
+                            <td style="text-align:center;">@item.ProductId</td>
+                            <td style="text-align:center;">@item.Name</td>
+                            <td style="text-align:center;"><img style="height:100px" src="@Url.Content("~/image/" + item.Photo)" alt=""></td>
+                            <td style="text-align:center;">@item.Description</td>
+                            <td style="text-align:center;">@item.CateName</td>
+                            <td style="text-align:center;">@item.ProviderName</td>
+                            <td style="text-align:center;">@item.Quantity</td>
+                            <td style="text-align:center;">@item.Discount%</td>
+                            <td style="text-align:center;">@item.Price.GetValueOrDefault(0).ToString("N0")₫</td>
+                            <td>
+                                <a href="/Admin/Product/Edit?ProductId=@item.ProductId"><span class="fa fa-edit"></span></a>
+                                <a href="/Admin/Product/Delete?ProductId=@item.ProductId" onclick="return confirm('Xác nhận xoá?');"><span class="fa fa-trash-alt"></span></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Content/DataTable/js/jquery.dataTables.min.js"></script>
+<script src="~/Content/DataTable/js/dataTables.bootstrap.min.js"></script>
+
+<script type="text/javascript">
+    $('#example').DataTable();
+</script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>

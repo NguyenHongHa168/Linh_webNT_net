@@ -1,0 +1,102 @@
+@using student.Models
+@model ProductViewModel
+
+@{
+    ViewBag.Title = "Đăng Ký Khóa Học Miễn Phí";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class=" shadow mb-4 mr-100">
+    <div class="card-body">
+        <div class="" style="width:600px">
+            <h3 style="text-transform: uppercase; font-weight:bold">Đăng Ký Khóa Học Miễn Phí 30 Ngày</h3>
+            <hr />
+
+            @* DEBUG: Hiển thị lỗi chi tiết *@
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <h5>❌ Lỗi Validation:</h5>
+                    <ul class="mb-0">
+                        @foreach (var modelState in ViewData.ModelState.Values)
+                        {
+                            foreach (var error in modelState.Errors)
+                            {
+                                <li>@error.ErrorMessage</li>
+                            }
+                        }
+                    </ul>
+                </div>
+            }
+
+            @using (Html.BeginForm("Register", "Course_free", FormMethod.Post, new { role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group mb-3">
+                    <label class="form-label">Tên Khóa Học <span style="color:red;">*</span></label>
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Nhập tên khóa học", required = "required" })
+                    @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger d-block" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label">Danh Mục <span style="color:red;">*</span></label>
+                    @Html.DropDownListFor(m => m.CateId, ViewBag.ListCate as SelectList, "-- Chọn --", new { @class = "form-control", required = "required" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label">Giáo viên <span style="color:red;">*</span></label>
+                    @Html.DropDownListFor(m => m.ProviderId, ViewBag.ListProvider as SelectList, "-- Chọn --", new { @class = "form-control", required = "required" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label">Ngày Bắt Đầu <span style="color:red;">*</span></label>
+                    @Html.TextBoxFor(m => m.StartDate, "{0:yyyy-MM-ddTHH:mm}", new { @class = "form-control", type = "datetime-local", required = "required" })
+                    @Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger d-block" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label">Ngày Kết Thúc (Tự Động Là 30 Ngày Sau) <span style="color:gray;">(Tự động)</span></label>
+                    @Html.TextBoxFor(m => m.EndDate, "{0:yyyy-MM-ddTHH:mm}", new { @class = "form-control", type = "datetime-local", @readonly = "readonly" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label">Mô Tả <span style="color:gray;">(Tùy chọn)</span></label>
+                    @Html.TextAreaFor(m => m.Description, new { @class = "form-control", rows = 4, placeholder = "Nhập mô tả khóa học" })
+                </div>
+
+                <div class="alert alert-info" role="alert">
+                    <strong><i class="bi bi-info-circle"></i> Thông Tin:</strong>
+                    <p class="mb-0">Khóa học này sẽ miễn phí trong 30 ngày. Sau 30 ngày, học viên cần thanh toán để tiếp tục học.</p>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="submit" class="btn btn-success btn-lg mx-4" style="font-size:16px">
+                        <i class="bi bi-check-circle"></i> Đăng Ký Miễn Phí
+                    </button>
+                    <a href="@Url.Action("Index", "Home")" class="btn btn-secondary btn-lg" style="font-size:16px">
+                        <i class="bi bi-x-circle"></i> Hủy
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // Tự động tính toán ngày kết thúc là 30 ngày sau ngày bắt đầu
+        $('#StartDate').change(function() {
+            var startDate = new Date($(this).val());
+            var endDate = new Date(startDate.getTime() + (30 * 24 * 60 * 60 * 1000));
+            
+            var year = endDate.getFullYear();
+            var month = String(endDate.getMonth() + 1).padStart(2, '0');
+            var day = String(endDate.getDate()).padStart(2, '0');
+            var hours = String(endDate.getHours()).padStart(2, '0');
+            var minutes = String(endDate.getMinutes()).padStart(2, '0');
+            
+            $('#EndDate').val(year + '-' + month + '-' + day + 'T' + hours + ':' + minutes);
+        });
+    });
+</script>

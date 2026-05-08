@@ -1,0 +1,110 @@
+﻿@using noithat.Models
+@model ProductViewModel
+
+@{
+    ViewBag.Title = "Thêm Sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class=" shadow mb-4 mr-100">
+    <div class="card-body">
+        <div class="" style="width:600px">
+            <h3 style="text-transform: uppercase; font-weight:bold">Thêm Sản phẩm Mới</h3>
+            <hr />
+
+            @* DEBUG: Hiển thị lỗi chi tiết *@
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <h5>Lỗi định dạng:</h5>
+                    <ul class="mb-0">
+                        @foreach (var modelState in ViewData.ModelState.Values)
+                        {
+                            foreach (var error in modelState.Errors)
+                            {
+                                <li>@error.ErrorMessage</li>
+                            }
+                        }
+                    </ul>
+                </div>
+            }
+
+            @using (Html.BeginForm("Add", "Product", FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group mb-3">
+                    <label class="form-label">Mã Sản phẩm <span style="color:red;">*</span></label>
+                    @Html.TextBoxFor(m => m.ProductId, new { @class = "form-control", placeholder = "Nhập mã sản phẩm", required = "required" })
+                    @Html.ValidationMessageFor(m => m.ProductId, "", new { @class = "text-danger d-block" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label">Tên Sản phẩm <span style="color:red;">*</span></label>
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Nhập tên sản phẩm", required = "required" })
+                    @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger d-block" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label">Giá <span style="color:red;">*</span></label>
+                    @Html.TextBoxFor(m => m.Price, "{0:0}", new { @class = "form-control", type = "number", placeholder = "0", required = "required", min = "1" })
+                    @Html.ValidationMessageFor(m => m.Price, "", new { @class = "text-danger d-block" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label">Số Lượng <span style="color:red;">*</span></label>
+                    @Html.TextBoxFor(m => m.Quantity, "{0:0}", new { @class = "form-control", type = "number", placeholder = "0", required = "required", min = "1" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label">Danh Mục <span style="color:red;">*</span></label>
+                    @Html.DropDownListFor(m => m.CateId, ViewBag.ListCate as SelectList, "-- Chọn --", new { @class = "form-control", required = "required" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label">Nhà cung cấp <span style="color:red;">*</span></label>
+                    @Html.DropDownListFor(m => m.ProviderId, ViewBag.ListProvider as SelectList, "-- Chọn --", new { @class = "form-control", required = "required" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label">Ngày Bắt Đầu <span style="color:red;">*</span></label>
+                    @Html.TextBoxFor(m => m.StartDate, "{0:yyyy-MM-ddTHH:mm}", new { @class = "form-control", type = "datetime-local", required = "required" })
+                    @Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger d-block" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label">Ngày Kết Thúc <span style="color:red;">*</span></label>
+                    @Html.TextBoxFor(m => m.EndDate, "{0:yyyy-MM-ddTHH:mm}", new { @class = "form-control", type = "datetime-local", required = "required" })
+                    @Html.ValidationMessageFor(m => m.EndDate, "", new { @class = "text-danger d-block" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label">Chiết Khấu (%) <span style="color:gray;">(Tùy chọn)</span></label>
+                    @Html.TextBoxFor(m => m.Discount, "{0:0}", new { @class = "form-control", type = "number", placeholder = "0", min = "0", max = "100" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label">Mô Tả <span style="color:gray;">(Tùy chọn)</span></label>
+                    @Html.TextAreaFor(m => m.Description, new { @class = "form-control", rows = 4, placeholder = "Nhập mô tả sản phẩm" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label">Hình Ảnh <span style="color:red;">*</span></label>
+                    <input type="file" id="Photo" name="Photo" class="form-control" accept="image/*" required />
+                    @Html.ValidationMessage("Photo", "", new { @class = "text-danger d-block" })
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="submit" class="btn btn-primary btn-lg mx-4" style="font-size:16px">
+                        <i class="bi bi-check-circle"></i> Thêm Sản phẩm
+                    </button>
+                    <a href="@Url.Action("Show", "Product")" class="btn btn-secondary btn-lg" style="font-size:16px">
+                        <i class="bi bi-x-circle"></i> Hủy
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+;0

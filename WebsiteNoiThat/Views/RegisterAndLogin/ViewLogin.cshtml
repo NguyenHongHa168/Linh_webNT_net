@@ -1,0 +1,31 @@
+﻿
+@{
+    var session = (UserLogin)Session[noithat.Common.Commoncontent.user_sesion];
+}
+
+@if (session != null)
+{
+    <a id="a_account" href="/RegisterAndLogin/ViewCurentUser"><img src="~/Content/client/assets/img/round-account-button-with-user-inside.png" /></a>
+    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+        @session.Username
+    </button>
+    <ul class="dropdown-menu dropdown-user" id="account_dropdown">
+        <li>
+            <a href="/Admin"><i class="fa fa-hourglass"></i> Đi đến trang Admin</a>
+        </li>
+        <li>
+        </li>
+        <li>
+            <a href=""><i class="fa fa-credit-card"></i> Thẻ tích điểm:@ViewBag.Card </a>
+        </li>
+        <li>
+            <a href="/RegisterAndLogin/Logout"><i class="fa fa-sign-out"></i> Đăng xuất</a>
+        </li>
+
+    </ul>
+}
+else
+{
+    <a id="a_account" href="/RegisterAndLogin/Login"><img src="~/Content/client/assets/img/round-account-button-with-user-inside.png" /></a>
+}
+
